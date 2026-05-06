@@ -1,68 +1,40 @@
 # ledgersql
 
-`ledgersql` treats databases as a local verification problem. The SQL implementation is intentionally narrow, but the fixtures and notes make the behavior explicit.
+`ledgersql` is a SQL project in databases. Its focus is to validate double-entry ledger constraints and reconciliation queries.
 
-## Ledgersql Checkpoints
+## Why This Exists
 
-Treat the compact fixture as the contract and the extended examples as a scratchpad. The code should stay boring enough that a change in behavior is obvious from the test output.
+The project exists to keep a narrow engineering decision visible and testable. For this repo, that decision is how index fit and constraint risk should influence a review result.
 
-## What This Is For
+## Ledgersql Review Notes
 
-I use this kind of project to make a rule visible before adding more machinery around it. The important part here is not the size of the codebase. It is that the input signals, scoring rule, fixture data, and expected output can all be checked in one sitting.
+For a quick review, compare `index fit` with `plan drift` before reading the middle cases.
 
-## Architecture Notes
+## Capabilities
 
-The project is organized around a compact model rather than a large framework. Inputs are scored, classified, and checked against golden fixtures. The constants live in code and are mirrored in metadata so documentation drift is easy to catch. The SQL project uses sqlite fixtures, views, and assertions to keep query behavior inspectable.
+- `fixtures/domain_review.csv` adds cases for index fit and join width.
+- `metadata/domain-review.json` records the same cases in structured form.
+- `config/review-profile.json` captures the read order and the two review questions.
+- `examples/ledgersql-walkthrough.md` walks through the case spread.
+- The SQL code includes a review path for `index fit` and `plan drift`.
+- `docs/field-notes.md` explains the strongest and weakest cases.
 
-## Case Study
+## Implementation Shape
 
-The examples are meant to be readable before they are exhaustive. They cover enough variation to show how latency and risk can pull a decision below the threshold.
+The core code exposes a scoring path and the added review layer uses `signal`, `slack`, `drag`, and `confidence`. The domain terms are `index fit`, `join width`, `constraint risk`, and `plan drift`.
 
-## Useful Pieces
+The SQL checks add a separate view over the domain review fixture.
 
-- Uses fixture data to keep query checks changes visible in code review.
-- Includes extended examples for fixture rows, including `surge` and `degraded`.
-- Documents constraint behavior tradeoffs in `docs/operations.md`.
-- Runs locally with a single verification command and no external credentials.
-- Stores project constants and verification metadata in `metadata/project.json`.
-
-## Tooling
-
-Use a normal shell with SQL available on `PATH`. The verifier is written as a PowerShell script because the portfolio was assembled on Windows.
-
-## Quality Gate
-
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts/audit.ps1
-```
-
-The audit command checks repository structure and README constraints before it delegates to the verifier.
-
-## Project Layout
-
-- `tests`: verification harness
-- `fixtures`: compact golden scenarios
-- `examples`: expanded scenario set
-- `metadata`: project constants and verification metadata
-- `docs`: operations and extension notes
-- `scripts`: local verification and audit commands
-- `schema.sql`: sqlite schema and view definitions
-
-## Scope
-
-The examples cover useful edges, not every edge. A larger version would add malformed-input tests, richer reports, and deeper domain parsers.
-
-## Expansion Ideas
-
-- Split the scoring constants into a typed configuration object and validate it before use.
-- Add a comparison mode that shows how decisions change when one signal is adjusted.
-- Add a loader for `examples/extended_cases.csv` and promote selected cases into the language test suite.
-- Add one more databases fixture that focuses on a malformed or borderline input.
-
-## Local Workflow
+## Local Usage
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify.ps1
 ```
 
-This runs the language-level build or test path against the compact fixture set.
+## Verification
+
+The check exercises the source code and the review fixture. `stale` is the high score at 289; `recovery` is the low score at 131.
+
+## Roadmap
+
+The fixture set is small enough to audit by hand. The next useful expansion is malformed input coverage, not extra surface area.

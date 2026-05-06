@@ -1,0 +1,73 @@
+{
+  "repo": "ledgersql",
+  "language": "SQL",
+  "category": "Databases",
+  "goal": "Validate double-entry ledger constraints and reconciliation queries.",
+  "review_model": {
+    "terms": [
+      "index fit",
+      "join width",
+      "constraint risk",
+      "plan drift"
+    ],
+    "lanes": [
+      "ship",
+      "watch",
+      "hold"
+    ],
+    "score": "signal * 2 + slack + confidence - drag * 3",
+    "purpose": "surface the domain-specific cases that need the most careful review"
+  },
+  "cases": [
+    {
+      "name": "baseline",
+      "focus": "index fit",
+      "signal": 66,
+      "slack": 52,
+      "drag": 31,
+      "confidence": 54,
+      "score": 145,
+      "lane": "ship"
+    },
+    {
+      "name": "stress",
+      "focus": "join width",
+      "signal": 56,
+      "slack": 54,
+      "drag": 27,
+      "confidence": 84,
+      "score": 169,
+      "lane": "ship"
+    },
+    {
+      "name": "edge",
+      "focus": "constraint risk",
+      "signal": 57,
+      "slack": 37,
+      "drag": 17,
+      "confidence": 79,
+      "score": 179,
+      "lane": "ship"
+    },
+    {
+      "name": "recovery",
+      "focus": "plan drift",
+      "signal": 65,
+      "slack": 29,
+      "drag": 27,
+      "confidence": 53,
+      "score": 131,
+      "lane": "watch"
+    },
+    {
+      "name": "stale",
+      "focus": "index fit",
+      "signal": 89,
+      "slack": 51,
+      "drag": 8,
+      "confidence": 84,
+      "score": 289,
+      "lane": "ship"
+    }
+  ]
+}
