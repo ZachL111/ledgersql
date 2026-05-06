@@ -1,0 +1,17 @@
+{
+  "repo": "ledgersql",
+  "thresholds": {
+    "signal": 3,
+    "slack": 2,
+    "confidence": 1,
+    "drag": 5,
+    "ship": 203,
+    "watch": 124
+  },
+  "terms": [
+    "index fit",
+    "join width",
+    "constraint risk",
+    "plan drift"
+  ]
+}

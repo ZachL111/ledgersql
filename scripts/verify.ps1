@@ -63,3 +63,9 @@ sqlite3 :memory: ".read tests/test.sql"
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/check-ledgersql-detail.ps1
 
 sqlite3 :memory: ".read tests/domain_review.sql"
+
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/check-ledgersql-properties.ps1
+if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/check-ledgersql-golden.ps1
+if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
